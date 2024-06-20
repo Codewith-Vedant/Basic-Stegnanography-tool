@@ -3,20 +3,20 @@ import numpy as np
 import os
 
 def message_to_binary(message):
-    """Convert a string message to a binary string."""
+    
     return ''.join(format(ord(char), '08b') for char in message)
 
 def binary_to_message(binary):
-    """Convert a binary string to a string message."""
+    
     chars = [binary[i:i+8] for i in range(0, len(binary), 8)]
     return ''.join(chr(int(char, 2)) for char in chars)
 
 def embed_message(image_path, output_path, message):
-    """Embed a message into an image."""
+    
     try:
         with Image.open(image_path) as img:
             img = img.convert('RGB')
-            binary_message = message_to_binary(message) + '1111111111111110'  # End of message delimiter
+            binary_message = message_to_binary(message) + '1111111111111110'  
             binary_message = list(binary_message)
             pixels = np.array(img)
 
@@ -36,7 +36,7 @@ def embed_message(image_path, output_path, message):
         print(f"An error occurred: {e}")
 
 def extract_message(image_path):
-    """Extract a message from an image."""
+    
     try:
         with Image.open(image_path) as img:
             img = img.convert('RGB')
@@ -47,7 +47,7 @@ def extract_message(image_path):
                 for j in range(pixels.shape[1]):
                     for k in range(3):  # R, G, B
                         binary_message += str(pixels[i, j, k] & 1)
-                        if binary_message.endswith('1111111111111110'):  # End of message delimiter
+                        if binary_message.endswith('1111111111111110'): 
                             return binary_to_message(binary_message[:-16])
 
         return binary_to_message(binary_message)
